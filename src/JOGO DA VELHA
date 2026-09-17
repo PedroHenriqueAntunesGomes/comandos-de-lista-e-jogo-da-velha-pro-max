@@ -1,0 +1,63 @@
+Titulo = ("=============JOGO DA VELHA=============")
+print(f"{Titulo}")
+tabuleiro = [ ' ' for _ in range(9)]
+
+def mostrar_tabuleiro(tab):
+  print(f"\n               {tab[0]} | {tab[1]} | {tab[2]}")
+  print(f"               --+---+--")
+  print(f"               {tab[3]} | {tab[4]} | {tab[5]}")
+  print("               --+---+--")
+  print(f"               {tab[6]} | {tab[7]} | {tab[8]}")
+
+mostrar_tabuleiro(tabuleiro)
+
+def verificar_vitoria(tab, jogador):
+
+    Vitorias = [
+
+              [0, 1, 2], [3, 4, 5], [6, 7, 8], #vitoria horizontal
+              [0, 3, 6], [1, 4, 7], [2, 5, 8], #vitoria vertical
+              [0, 4, 8], [2, 4, 6], #vitoria diagonal
+    ]
+
+    for c in Vitorias:
+        if tab[c[0]] == tab[c[1]] == tab[c[2]] == jogador:
+            return True
+    return False
+
+def jogo_da_velha():
+    jogador_atual = 'X'
+    jogadas = 0
+
+    while jogadas < 9:
+        mostrar_tabuleiro(tabuleiro)
+        try:
+            escolha = int(input(f"Jogador {jogador_atual}, escolha uma posição (0-8): "))
+            # Check for valid range
+            if not (0 <= escolha <= 8):
+                print("Escolha inválida. Por favor, digite um número entre 0 e 8.")
+                continue # Ask for input again
+            
+            # Check if the chosen cell is empty
+            if tabuleiro[escolha] == ' ':
+                tabuleiro[escolha] = jogador_atual
+                jogadas += 1
+
+                if verificar_vitoria(tabuleiro, jogador_atual):
+                    mostrar_tabuleiro(tabuleiro)
+                    print(f'Parabéns! O jogador {jogador_atual} venceu!')
+                    return
+
+                # Switch player
+                jogador_atual = 'O' if jogador_atual == 'X' else 'X'
+            else:
+                print("Essa posição já está ocupada. Tente novamente.")
+        except ValueError:
+            print("Entrada inválida. Por favor, digite um número.")
+        
+    # If the loop finishes (jogadas == 9) and no one won
+    if jogadas == 9:
+        mostrar_tabuleiro(tabuleiro)
+        print("Empate!")
+
+jogo_da_velha()
